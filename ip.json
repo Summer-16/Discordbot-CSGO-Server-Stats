@@ -1,11 +1,31 @@
 {
    "IP": [
       {
-         "ip": "193.105.163.202",
+         "ip": "prime.ganggaming.in",
          "port": "27015"
       },
       {
-         "ip": "185.38.148.140",
+         "ip": "prime.ganggaming.in",
+         "port": "27020"
+      },
+      {
+         "ip": "prime.ganggaming.in",
+         "port": "27415"
+      },
+      {
+         "ip": "prime.ganggaming.in",
+         "port": "27420"
+      },
+      {
+         "ip": "prime.ganggaming.in",
+         "port": "27060"
+      },
+      {
+         "ip": "prime.ganggaming.in",
+         "port": "27115"
+      },
+      {
+         "ip": "awp.ganggaming.in",
          "port": "27015"
       }
    ]
