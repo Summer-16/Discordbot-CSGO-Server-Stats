@@ -3,16 +3,16 @@ const Discord = require("discord.js");
 var SourceQuery = require('sourcequery');
 
 // This is your client. Some people call it `bot`, some people call it `self`, 
-// some might call it `cootchie`. Either way, when you see `client.something`, or `bot.something`,
-// this is what we're refering to. Your client.
 const client = new Discord.Client();
 
 
 // Here we load the config.json file that contains our token and our prefix values. 
-const config = require("./config.json");
-const ip_file = require("./ip.json");
 // config.token contains the bot's token
 // config.prefix contains the message prefix.
+const config = require("./config.json");
+// Here we load the ip.json file that contains ip of servers
+const ip_file = require("./ip.json");
+
 
 client.on("ready", () => {
   // This event will run if the bot starts, and logs in, successfully.
@@ -39,6 +39,7 @@ client.on("guildDelete", guild => {
 client.on("message", async message => {
   // This event will run on every single message received, from any channel or DM.
 
+  // Function to query a csgo server , parse server details, make an embed and then sends on the discord
   function queryserver(ip, port) {
     let sq = new SourceQuery(1000); // 1000ms timeout
     console.log(ip + "  " + port);
@@ -48,8 +49,6 @@ client.on("message", async message => {
         sq.getPlayers(function (err, players) {
           if (!err) {
             console.log(sq.address);
-            //var msg = "#1 \n" + info.name + "\nServer IP : " + config.ip1 + ":" + config.port1 + "\nCurrent Map : " + info.map + "\nMax.Players : " + info.maxplayers + "\nCurrent Players : " + info.players + "\n\nFollowing Players are online\nPlayer Name\n";
-            //console.log(msg);
             var counter = 0;
             playersname = "";
             for (i = 0; i < players.length; i++) {
@@ -64,15 +63,15 @@ client.on("message", async message => {
                       icon_url: client.user.avatarURL
                     },
                     title: "Summer",
-                    url: "http://google.com",
+                    url: "https://ganggaming.in",
                     description: "Houdy hey, This is your Bot. Here is the status of server, I keep track off.",
                     fields: [{
                       name: "Server Name",
-                      value: "**"+info.name+"**"
+                      value: "**" + info.name + "**"
                     },
                     {
                       name: "Server IP",
-                      value: "**connect "+ip+":"+port+"**",
+                      value: "**connect " + ip + ":" + port + "**",
                       "inline": true
                     },
                     {
@@ -128,9 +127,6 @@ client.on("message", async message => {
   if (message.content.indexOf(config.prefix) !== 0) return;
 
   // Here we separate our "command" name, and our "arguments" for the command. 
-  // e.g. if we have the message "+say Is this the real life?" , we'll get the following:
-  // command = say
-  // args = ["Is", "this", "the", "real", "life?"]
   const args = message.content.slice(config.prefix.length).trim().split(/ ss/g);
   var arguments = args.shift().toLowerCase();
   arguments = arguments.split(" ");
@@ -148,11 +144,13 @@ client.on("message", async message => {
   }
 
   if (command == "help") {
+    // Reply back with the all possible commands and usage 
     const m = await message.channel.send("Okie :)");
     m.edit("You can use following Commands\n-> +ping (It will give ping details)\n-> +status <server ip> <server port> (it will give you live status of any csgo server)\n-> +statusall (It will give you status of all csgo servers of the Owner\n\n + is prefix it is required for every command");
   }
 
   if (command == "statusall") {
+    // Function to query all servers at once
     ip_file.IP.forEach((value, key) => {
       console.log(ip_file.IP[key].ip + "  " + ip_file.IP[key].port);
       queryserver(ip_file.IP[key].ip, ip_file.IP[key].port);
@@ -160,6 +158,7 @@ client.on("message", async message => {
   }
 
   if (command == "status") {
+    // Function to query the server provided by user in arguments
     console.log(arguments[1] + "  " + arguments[2]);
     queryserver(arguments[1], arguments[2]);
   }
